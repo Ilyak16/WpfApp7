@@ -10,7 +10,7 @@ namespace WpfApp7.Models
     {
         private int _id;
         private string _name;
-        private int _score;
+        private int _rating;
         public int Id
         {
             get => _id;
@@ -32,16 +32,17 @@ namespace WpfApp7.Models
             }
         }
 
-        public int Score 
+        public int Rating 
         { 
-            get => _score;
+            get => _rating;
             set
             {
-                if (_score == value) return;
-                _score = value;
+                if (_rating == value) return;
+                _rating = value;
                 OnPropertyChanged();
             }
         }
+
 
         public User() : this(-1, string.Empty) { }
         public User(int id, string name)

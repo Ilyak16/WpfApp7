@@ -4,8 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WpfApp7.ViewModels"
+        xmlns:conv="clr-namespace:WpfApp7.Converters"
+        x:Name="win"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <conv:IntToBooliangInReangeConverter x:Key="IntToBooliangInRangeConverter" Min="25"/>
+    </Window.Resources>
     <d:Window.DataContext>
         <vm:MainWindowViewModel/>
     </d:Window.DataContext>
@@ -13,6 +18,16 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Border Padding="10" BorderThickness="1" BorderBrush="Black" Margin="3" CornerRadius="10">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{Binding ElementName=win, Path=Background}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Rating, Converter={StaticResource IntToBooliangInRangeConverter}}" Value="False">
+                                    <Setter Property="Background" Value="Pink"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <StackPanel>
                         <TextBlock>
                             <Run Text="{Binding Id}"/>
@@ -20,17 +35,7 @@
                             <Run Text="{Binding Name}"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Score, StringFormat='Score: {0}'}"/>
-                            <Button Content="+" Command="{Binding DataContext.IncreaseScoreComand, 
-                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    Margin="10,0"
-                                    Padding="2"/>
-                            <Button Content="-" Command="{Binding DataContext.DecreaseScoreComand, 
-                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
-                                    CommandParameter="{Binding}"
-                                    Margin="10,0"
-                                    Padding="2"/>
+                            <TextBlock Text="{Binding Rating, StringFormat='Score: {0}'}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

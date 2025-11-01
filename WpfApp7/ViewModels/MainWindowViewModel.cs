@@ -11,41 +11,40 @@ namespace WpfApp7.ViewModels
 {
     internal class MainWindowViewModel : PropertyChangeBase
     {        
-        private UserRepository _userRepository;
+        private readonly UserRepository _userRepository;
         private MyCommand _increaseScoreComand;
         private MyCommand _decreaseScoreComand;
-        public MyCommand IncreaseScoreComand
-        {
-            get => _increaseScoreComand ??= new(
-                (obj) =>
-                {
-                    if (obj is not User user) return;
-                    user.Score++;
-                }, 
-                (obj) =>
-                {
-                    if (obj is not User user) return false;
-                    return user.Score <= int.MaxValue;
-                }
-                );
+        //public MyCommand IncreaseScoreComand
+        //{
+        //    get => _increaseScoreComand ??= new(
+        //        (obj) =>
+        //        {
+        //            if (obj is not User user) return;
+        //            user.Rating++;
+        //        }, 
+        //        (obj) =>
+        //        {
+        //            if (obj is not User user) return false;
+        //            return user.Rating <= int.MaxValue;
+        //        }
+        //        );
 
-        }
-        public MyCommand DecreaseScoreComand
-        {
-            get => _decreaseScoreComand ??= new(
-                (obj) =>
-                {
-                    if (obj is not User user) return;
-                    user.Score--;
-                },
-                (obj) =>
-                {
-                    if (obj is not User user) return false;
-                    return user.Score > 0;
-                }
-                );
-
-        }
+        //}
+        //public MyCommand DecreaseScoreComand
+        //{
+        //    get => _decreaseScoreComand ??= new(
+        //        (obj) =>
+        //        {
+        //            if (obj is not User user) return;
+        //            user.Rating--;
+        //        },
+        //        (obj) =>
+        //        {
+        //            if (obj is not User user) return false;
+        //            return user.Rating > 0;
+        //        }
+        //        );
+        //}
         public ObservableCollection<User> Users { get; set; }
         public MainWindowViewModel()
         {
