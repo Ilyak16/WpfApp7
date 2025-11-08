@@ -45,13 +45,22 @@ namespace WpfApp7.ViewModels
         //        }
         //        );
         //}
-        public ObservableCollection<User> Users { get; set; }
+        private ObservableCollection<User> _users;
+        public ObservableCollection<User> Users 
+        {
+            get => _users;
+            set
+            {
+                if (value != null) _users = value;
+            } 
+        }
         public MainWindowViewModel()
         {
             _userRepository = new();
             var collection = _userRepository.GetAll();
             Users = new ObservableCollection<User>(collection);
             Users.CollectionChanged += OnListChanged;
+            Users.Add(new User(0, "Jeck", 100));
         }
 
         private void OnListChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -60,7 +69,12 @@ namespace WpfApp7.ViewModels
             {
                 foreach (User user in e.NewItems)
                 {
-                    _userRepository.Add(user);
+                    if (!_userRepository.Add(user))
+                    {
+                        Users = new(Users.Except([user]));
+                    }
+                    Users.Add(new User(0, "Jeck", 100));
+
                 }
             }
         }

@@ -3,29 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp7.Domain;
 using WpfApp7.Interfaces;
 
 namespace WpfApp7.Models
 {
     public class UserRepository : IReposotory<User>
     {
-        private List<User> _data = 
-        [
-            new User(1, "Name1") {Rating = 123 },
-            new User(2, "Name2"){Rating = 5},
-            new User(3, "Name3"){Rating = -9999},
-            new User(4, "Name4") { Rating = 500 },
-        ];
-        public IEnumerable<User> GetAll() => _data;
-        public User? Get(int id) => _data.FirstOrDefault(u => u.Id == id);
+        private readonly string conn = "Data Source = mydatabase.db";
+        public IEnumerable<User> GetAll()
+        {
+            try
+            {
+                using var context = new MyDataBaseContext(conn);
+                return context.Users.ToList();
+            }
+            catch (Exception e) { return []; }
+        }
+        public User? Get(int id)
+        {
+            try
+            {
+                using var context = new MyDataBaseContext(conn);
+                return context.Users.FirstOrDefault(u => u.Id == id);
+            }
+            catch { return null; }
+        }
         public bool Add(User user)
         {
-            user.Id = GetNewId();
-            if (_data.Any(u=> user.Name == u.Name))
-                return false;
-            _data.Add(user);
-            return true;
+            try
+            {
+                using var context = new MyDataBaseContext(conn);
+                context.Users.Add(user);
+                context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
         }
-        private int GetNewId () => _data.Max(u => u.Id)+1;
+        public bool Remove(int id)
+        {
+            try
+            {
+                using var context = new MyDataBaseContext(conn);
+                User? user = context.Find<User>(id);
+                if (user != null)
+                {
+                    context.Remove(user);
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch { return false; }
+            ;
+        }
+        public bool Update(int id, User entity)
+        {
+            try
+            {
+                using var context = new MyDataBaseContext(conn);
+                User? user = context.Find<User>(id);
+
+                if (user != null && user.Id == entity.Id)
+                {
+                    user.Name = entity.Name;
+                    user.Rating = entity.Rating;
+                    //Помечаем для модефикации так
+                    context.Update(user);
+                    // Либо так
+                    //context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch { return false; };
+        }
     }
 }

@@ -11,5 +11,8 @@ namespace WpfApp7.Interfaces
         public T? Get(int id);
         IEnumerable<T>? GetAll();
         public bool Add(T entity);
+        public bool Remove (int id);
+        public bool Update(int id, T entity);
     }
+
 }

@@ -44,11 +44,12 @@ namespace WpfApp7.Models
         }
 
 
-        public User() : this(-1, string.Empty) { }
-        public User(int id, string name)
+        public User() : this(-1, string.Empty, 0) { }
+        public User(int id, string name, int Rating)
         {
             Id = id;
             _name = name;
+            _rating = Rating;
         }
     }
 }
